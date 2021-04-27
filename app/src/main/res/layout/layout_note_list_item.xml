@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="100"
+    android:background="@color/purple_200"
+    android:gravity="center_vertical">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/purple_500"/>
+
+    <TextView
+        android:id="@+id/note_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="75"
+        android:text="@string/an_epic_title"
+        android:textSize="23sp"
+        android:lines="1"
+        android:padding="10dp"
+        android:textColor="@color/black"/>
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4" />
+
+    <TextView
+        android:id="@+id/note_timestamp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="20"
+        android:text="@string/sep_21"
+        android:textSize="17sp"
+        android:lines="1"
+        android:padding="10dp"
+        android:textColor="@color/black"/>
+</LinearLayout>
