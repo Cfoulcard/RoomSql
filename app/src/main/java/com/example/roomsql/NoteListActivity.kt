@@ -3,19 +3,44 @@ package com.example.roomsql
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.roomsql.adapters.NotesRecyclerAdapter
 import com.example.roomsql.models.Note
 
 class NoteListActivity : AppCompatActivity() {
+
+    // Variables
+    private val mNotes = ArrayList<Note>()
+    var mNoteRecyclerAdapter: NotesRecyclerAdapter? = null
+    private var mRecyclerView: RecyclerView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_notes_list)
+         mRecyclerView = findViewById(R.id.recyclerView)
 
-        val TAG = "NotesListActivity"
-
-        val note = Note("Title", "Johnny", "TBA")
-       // val note = Note("some title", "some content for the note", null)
-
-        Log.d(TAG, "onCreate: my notes: $note")
-
+        initRecyclerView()
+        insertFakeNotes()
     }
+
+    private fun insertFakeNotes() {
+        for (i in 0..999) {
+            val note = Note("", "", "")
+            note.setTitle("title #$i")
+            note.setContent("content #: $i")
+            note.setTimestamp("Jan 2019")
+            mNotes.add(note)
+        }
+        mNoteRecyclerAdapter!!.notifyDataSetChanged()
+    }
+
+    private fun initRecyclerView() {
+
+        val linearLayoutManager = LinearLayoutManager(this)
+        mRecyclerView!!.layoutManager = linearLayoutManager
+        mNoteRecyclerAdapter = NotesRecyclerAdapter(mNotes)
+        mRecyclerView!!.adapter = mNoteRecyclerAdapter
+    }
+
 }
