@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.roomsql.adapters.NotesRecyclerAdapter
 import com.example.roomsql.models.Note
+import com.example.roomsql.util.VerticalSpacingItemDecorator
 
 class NoteListActivity : AppCompatActivity() {
 
@@ -39,6 +40,8 @@ class NoteListActivity : AppCompatActivity() {
 
         val linearLayoutManager = LinearLayoutManager(this)
         mRecyclerView!!.layoutManager = linearLayoutManager
+        val itemDecorator = VerticalSpacingItemDecorator(10)
+        mRecyclerView!!.addItemDecoration(itemDecorator)
         mNoteRecyclerAdapter = NotesRecyclerAdapter(mNotes)
         mRecyclerView!!.adapter = mNoteRecyclerAdapter
     }

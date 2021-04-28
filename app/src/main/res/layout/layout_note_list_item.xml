@@ -10,7 +10,6 @@
         android:id="@+id/view"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:background="@color/purple_500"/>
 
     <TextView
@@ -37,7 +36,6 @@
         android:layout_weight="20"
         android:text="@string/sep_21"
         android:textSize="17sp"
-        android:lines="1"
         android:padding="10dp"
         android:textColor="@color/black"/>
 </LinearLayout>
