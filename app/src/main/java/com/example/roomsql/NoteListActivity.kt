@@ -3,6 +3,7 @@ package com.example.roomsql
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.roomsql.adapters.NotesRecyclerAdapter
@@ -23,6 +24,9 @@ class NoteListActivity : AppCompatActivity() {
 
         initRecyclerView()
         insertFakeNotes()
+
+        setSupportActionBar(findViewById<Toolbar>(R.id.toolbar))
+        title = "Room SQL"
     }
 
     private fun insertFakeNotes() {

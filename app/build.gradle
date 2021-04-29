@@ -43,4 +43,7 @@ dependencies {
 
     // RecyclerView
     implementation "androidx.recyclerview:recyclerview:1.2.0"
+
+    // CoordinatorLayout for custom Toolbar
+    implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
 }
