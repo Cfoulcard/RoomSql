@@ -1,5 +1,6 @@
 package com.example.roomsql
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,7 +11,11 @@ import com.example.roomsql.adapters.NotesRecyclerAdapter
 import com.example.roomsql.models.Note
 import com.example.roomsql.util.VerticalSpacingItemDecorator
 
-class NoteListActivity : AppCompatActivity() {
+/**
+ * Contains the home activity screen listing every individual note. Uses a RecyclerView
+ * to parse the data onto the screen.
+ */
+class NoteListActivity : AppCompatActivity(), NotesRecyclerAdapter.OnNoteListener {
 
     // Variables
     private val mNotes = ArrayList<Note>()
@@ -29,6 +34,7 @@ class NoteListActivity : AppCompatActivity() {
         title = "Room SQL"
     }
 
+    // Note data testing for recycler view
     private fun insertFakeNotes() {
         for (i in 0..999) {
             val note = Note("", "", "")
@@ -46,8 +52,15 @@ class NoteListActivity : AppCompatActivity() {
         mRecyclerView!!.layoutManager = linearLayoutManager
         val itemDecorator = VerticalSpacingItemDecorator(10)
         mRecyclerView!!.addItemDecoration(itemDecorator)
-        mNoteRecyclerAdapter = NotesRecyclerAdapter(mNotes)
+        mNoteRecyclerAdapter = NotesRecyclerAdapter(mNotes, this)
         mRecyclerView!!.adapter = mNoteRecyclerAdapter
+    }
+
+    /**
+     * Used to return a specified action, such as opening a new activity. In this case notes
+     */
+    override fun onNoteClick(position: Int) {
+        Log.d("ClickMe!", "onNoteClick: $position")
     }
 
 }

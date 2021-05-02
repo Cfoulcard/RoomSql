@@ -1,6 +1,5 @@
 package com.example.roomsql.adapters
 
-import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,26 +13,14 @@ import com.example.roomsql.models.Note
  * the note objects and list of notes in the XML. The Data Structure used to hold these notes
  * is an array list
  */
-class NotesRecyclerAdapter(arrayList: ArrayList<Note>) :
+class NotesRecyclerAdapter(mNotes: ArrayList<Note>, onNoteListener: OnNoteListener?) :
     RecyclerView.Adapter<NotesRecyclerAdapter.ViewHolder>() {
 
     // Using arraylist to automatically adapt to the size of the notes. Regular arrays cannot
     // accomplish this
-    private var mNotes = arrayList
+    private var mNotes = mNotes
 
-    /**
-     * Responsible for holding the view of each individual list item
-     */
-    class ViewHolder : RecyclerView.ViewHolder {
-
-        var timestamp: TextView? = null
-        var title:TextView? = null
-
-        constructor(itemView: View) : super(itemView) {
-            title = itemView.findViewById(R.id.note_title)
-            timestamp = itemView.findViewById(R.id.note_timestamp)
-        }
-    }
+    private var mOnNoteListener: OnNoteListener? = onNoteListener
 
     /**
      * Responsible for initializing the viewholder object. This method can be used almost
@@ -42,8 +29,33 @@ class NotesRecyclerAdapter(arrayList: ArrayList<Note>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.layout_note_list_item, parent, false)
-        return ViewHolder(view)
+        return ViewHolder(view, mOnNoteListener)
     }
+
+    /**
+     * Responsible for holding the view of each individual list item
+     */
+    class ViewHolder(itemView: View, onNoteListener: OnNoteListener?) : RecyclerView.ViewHolder(
+        itemView
+    ), View.OnClickListener {
+
+        var timestamp: TextView? = null
+        var title:TextView? = null
+        var mOnNoteListener: OnNoteListener? = null
+
+        init {
+            title = itemView.findViewById(R.id.note_title)
+            timestamp = itemView.findViewById(R.id.note_timestamp)
+            mOnNoteListener = onNoteListener
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            mOnNoteListener?.onNoteClick(bindingAdapterPosition)
+        }
+    }
+
+
 
     /**
      * Called for every entry in your list. Sets attributes to ViewHolder objects
@@ -58,5 +70,12 @@ class NotesRecyclerAdapter(arrayList: ArrayList<Note>) :
      */
     override fun getItemCount(): Int {
         return mNotes.size
+    }
+
+    /**
+     * Detect clicks and send position of items
+     */
+    interface OnNoteListener {
+        fun onNoteClick(position: Int)
     }
 }
