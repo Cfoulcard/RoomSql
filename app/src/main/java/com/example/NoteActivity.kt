@@ -22,9 +22,11 @@ class NoteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dummy)
+
         mLinedEditText = findViewById(R.id.note_text)
         mEditTitle = findViewById(R.id.note_edit_title)
         mViewTitle = findViewById(R.id.note_text_title)
+
         if (incomingIntent) {
             // this is a new note (EDIT MODE)
             setNewNoteProperties()
@@ -35,9 +37,9 @@ class NoteActivity : AppCompatActivity() {
     }
 
     private val incomingIntent: Boolean
-        private get() {
-            if (intent.hasExtra("selected_note")) {
-                mNoteInitial = intent.getParcelableExtra("selected_note")
+        get() {
+            if (intent.hasExtra("selected note")) {
+                mNoteInitial = intent.getParcelableExtra("selected note")
                 mIsNewNote = false
                 return false
             }
@@ -56,7 +58,10 @@ class NoteActivity : AppCompatActivity() {
         mLinedEditText!!.setText(mNoteInitial!!.getContent())
     }
 
+
     companion object {
         private const val TAG = "NoteActivity"
     }
+
+
 }
