@@ -1,20 +1,27 @@
 package com.example.roomsql.models
 
 import android.os.Parcel
-import android.os.Parcelable.Creator
+import android.os.Parcelable
 import java.sql.Timestamp
 
 /**
  * Defining the Note being developed. The constructor method inside the class itself
  * allows us to input content (title, content, timestamp) into the class when we are ready to use it.
  *
- *
+ * This class implements Parcelable to package the Note object and add it to a bundle.
  */
-class Note(
+class Note (
     private var title: String?,
     private var content: String?,
     private var timestamp: String?
-) {
+) : Parcelable {
+
+    constructor(parcel: Parcel) : this(
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString()
+    ) {
+    }
 
     fun Note() {}
 
@@ -57,14 +64,25 @@ class Note(
                 '}'
     }
 
-    fun describeContents(): Int {
+    override fun describeContents(): Int {
         return 0
     }
 
-    fun writeToParcel(parcel: Parcel, i: Int) {
+    override fun writeToParcel(parcel: Parcel, i: Int) {
         parcel.writeString(title)
         parcel.writeString(content)
         parcel.writeString(timestamp)
+    }
+
+
+    companion object CREATOR : Parcelable.Creator<Note> {
+        override fun createFromParcel(parcel: Parcel): Note {
+            return Note(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Note?> {
+            return arrayOfNulls(size)
+        }
     }
 
 

@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.NoteActivity
 import com.example.roomsql.adapters.NotesRecyclerAdapter
 import com.example.roomsql.models.Note
 import com.example.roomsql.util.VerticalSpacingItemDecorator
@@ -61,6 +62,9 @@ class NoteListActivity : AppCompatActivity(), NotesRecyclerAdapter.OnNoteListene
      */
     override fun onNoteClick(position: Int) {
         Log.d("ClickMe!", "onNoteClick: $position")
+        val intent = Intent(this, NoteActivity::class.java)
+        intent.putExtra("selected note", mNotes.get(position))
+        this.startActivity(intent)
     }
 
 }
