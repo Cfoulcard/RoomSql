@@ -7,7 +7,6 @@ import android.util.Log
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.NoteActivity
 import com.example.roomsql.adapters.NotesRecyclerAdapter
 import com.example.roomsql.models.Note
 import com.example.roomsql.util.VerticalSpacingItemDecorator

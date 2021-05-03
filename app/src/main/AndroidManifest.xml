@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.example.NoteActivity"/>
+        <activity android:name=".NoteActivity"/>
     </application>
 
 </manifest>
