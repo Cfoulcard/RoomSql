@@ -1,31 +1,40 @@
 package com.example.roomsql
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.roomsql.adapters.NotesRecyclerAdapter
 import com.example.roomsql.models.Note
 import com.example.roomsql.util.VerticalSpacingItemDecorator
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 /**
  * Contains the home activity screen listing every individual note. Uses a RecyclerView
  * to parse the data onto the screen.
  */
-class NoteListActivity : AppCompatActivity(), NotesRecyclerAdapter.OnNoteListener {
+class NoteListActivity :
+    AppCompatActivity(),
+    NotesRecyclerAdapter.OnNoteListener,
+    View.OnClickListener
+{
 
     // Variables
     private val mNotes = ArrayList<Note>()
-    var mNoteRecyclerAdapter: NotesRecyclerAdapter? = null
+    private var mNoteRecyclerAdapter: NotesRecyclerAdapter? = null
     private var mRecyclerView: RecyclerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes_list)
+
          mRecyclerView = findViewById(R.id.recyclerView)
+        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener(this)
 
         initRecyclerView()
         insertFakeNotes()
@@ -52,6 +61,7 @@ class NoteListActivity : AppCompatActivity(), NotesRecyclerAdapter.OnNoteListene
         mRecyclerView!!.layoutManager = linearLayoutManager
         val itemDecorator = VerticalSpacingItemDecorator(10)
         mRecyclerView!!.addItemDecoration(itemDecorator)
+        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecyclerView)
         mNoteRecyclerAdapter = NotesRecyclerAdapter(mNotes, this)
         mRecyclerView!!.adapter = mNoteRecyclerAdapter
     }
@@ -65,5 +75,31 @@ class NoteListActivity : AppCompatActivity(), NotesRecyclerAdapter.OnNoteListene
         intent.putExtra("selected note", mNotes.get(position))
         this.startActivity(intent)
     }
+
+    override fun onClick(v: View?) {
+        val intent: Intent = Intent(this, NoteActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun deleteNote(note: Note) {
+        mNotes.remove(note)
+        mNoteRecyclerAdapter!!.notifyDataSetChanged()
+    }
+
+    var itemTouchHelperCallback: ItemTouchHelper.SimpleCallback =
+        object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                deleteNote(mNotes[viewHolder.adapterPosition])
+            }
+        }
 
 }

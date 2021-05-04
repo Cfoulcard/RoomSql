@@ -1,10 +1,13 @@
 package com.example.roomsql
 
+import android.app.Activity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.RelativeLayout
@@ -58,8 +61,9 @@ class NoteActivity : AppCompatActivity(),
             setNewNoteProperties()
             enableEditMode()
         } else {
-            // this is note a new note (VIEW MODE)
+            // this is not a new note (VIEW MODE)
             setNoteProperties()
+            disableContentInteraction()
         }
     }
 
@@ -69,6 +73,7 @@ class NoteActivity : AppCompatActivity(),
         mGestureDetector = GestureDetector(this, this)
         mCheck?.setOnClickListener(this)
         mViewTitle?.setOnClickListener(this)
+        mBackArrow?.setOnClickListener(this)
 
     }
 
@@ -86,12 +91,30 @@ class NoteActivity : AppCompatActivity(),
             return true
         }
 
+    private fun disableContentInteraction() {
+        mLinedEditText!!.keyListener = null
+        mLinedEditText!!.isFocusable = false
+        mLinedEditText!!.isFocusableInTouchMode = false
+        mLinedEditText!!.isCursorVisible = false
+        mLinedEditText!!.clearFocus()
+    }
+
+    private fun enableContentInteraction() {
+        mLinedEditText!!.keyListener = EditText(this).keyListener
+        mLinedEditText!!.isFocusable = true
+        mLinedEditText!!.isFocusableInTouchMode = true
+        mLinedEditText!!.isCursorVisible = true
+        mLinedEditText!!.requestFocus()
+    }
+
     private fun enableEditMode() {
         mBackArrowContainer!!.visibility = View.GONE
         mCheckContainer!!.visibility = View.VISIBLE
         mViewTitle!!.visibility = View.GONE
         mEditTitle!!.visibility = View.VISIBLE
         mMode = EDIT_MODE_ENABLED
+
+        enableContentInteraction()
     }
 
     private fun disableEditMode() {
@@ -100,6 +123,18 @@ class NoteActivity : AppCompatActivity(),
         mViewTitle!!.visibility = View.VISIBLE
         mEditTitle!!.visibility = View.GONE
         mMode = EDIT_MODE_DISABLED
+
+        disableContentInteraction()
+    }
+
+    private fun hideSoftKeyboard() {
+        val imm: InputMethodManager =
+            this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        val view: View? = this.getCurrentFocus()
+        if (view == null) {
+            View(this)
+        }
+        imm.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 
     private fun setNewNoteProperties() {
@@ -182,12 +217,16 @@ class NoteActivity : AppCompatActivity(),
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.toolbar_check -> {
+                hideSoftKeyboard()
                 disableEditMode()
             }
             R.id.note_text_title -> {
                 enableEditMode()
                 mEditTitle!!.requestFocus()
                 mEditTitle!!.setSelection(mEditTitle!!.length())
+            }
+            R.id.toolbar_back_arrow -> {
+                finish()
             }
         }
     }
@@ -200,4 +239,18 @@ class NoteActivity : AppCompatActivity(),
         }
     }
 
+    // Called when the activity is paused
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("mode", mMode)
+    }
+
+    // Used to have enable edit mode even after a configuration change while editing
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        mMode = savedInstanceState.getInt("mode")
+        if (mMode == EDIT_MODE_ENABLED) {
+            enableEditMode()
+        }
+    }
 }
