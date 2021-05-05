@@ -2,6 +2,10 @@ package com.example.roomsql.models
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import java.sql.Timestamp
 
 /**
@@ -10,25 +14,47 @@ import java.sql.Timestamp
  *
  * This class implements Parcelable to package the Note object and add it to a bundle.
  */
+@Entity(tableName = "notes")
 class Note (
+
+    @PrimaryKey(autoGenerate = true)
+    val id: Int?,
+
+    @ColumnInfo(name ="title")
     private var title: String?,
+
+    @ColumnInfo(name ="content")
     private var content: String?,
+
+    @ColumnInfo(name ="timestamp")
     private var timestamp: String?
 ) : Parcelable {
 
+
     constructor(parcel: Parcel) : this(
+        parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readString(),
         parcel.readString(),
         parcel.readString()
     ) {
     }
 
+    @Ignore
     fun Note() {}
 
     protected fun Note(`in`: Parcel) {
         title = `in`.readString()
         content = `in`.readString()
         timestamp = `in`.readString()
+    }
+
+    @JvmName("getId1")
+    fun getId(): Int? {
+        return id
+    }
+
+    fun setId(): Int? {
+        return id
     }
 
     fun getTitle(): String? {
@@ -57,33 +83,34 @@ class Note (
 
     // Prints out Note info into the log
     override fun toString(): String {
-        return "Note{" +
-                "title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", timestamp='" + timestamp + '\'' +
-                '}'
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    override fun writeToParcel(parcel: Parcel, i: Int) {
-        parcel.writeString(title)
-        parcel.writeString(content)
-        parcel.writeString(timestamp)
+        return "Note(id=$id, " +
+                "title=$title, " +
+                "content=$content, " +
+                "timestamp=$timestamp)"
     }
 
 
-    companion object CREATOR : Parcelable.Creator<Note> {
-        override fun createFromParcel(parcel: Parcel): Note {
-            return Note(parcel)
-        }
 
-        override fun newArray(size: Int): Array<Note?> {
-            return arrayOfNulls(size)
-        }
+override fun writeToParcel(parcel: Parcel, flags: Int) {
+    parcel.writeValue(id)
+    parcel.writeString(title)
+    parcel.writeString(content)
+    parcel.writeString(timestamp)
+}
+
+override fun describeContents(): Int {
+    return 0
+}
+
+companion object CREATOR : Parcelable.Creator<Note> {
+    override fun createFromParcel(parcel: Parcel): Note {
+        return Note(parcel)
     }
+
+    override fun newArray(size: Int): Array<Note?> {
+        return arrayOfNulls(size)
+    }
+}
 
 
 }
