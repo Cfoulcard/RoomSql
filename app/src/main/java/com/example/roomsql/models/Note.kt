@@ -13,6 +13,9 @@ import java.sql.Timestamp
  * allows us to input content (title, content, timestamp) into the class when we are ready to use it.
  *
  * This class implements Parcelable to package the Note object and add it to a bundle.
+ *
+ * This class also serves as a model for the data (entity). Essentially a table with a name,
+ * columns(field info), and a primary key to identify what column to add/use in Room
  */
 @Entity(tableName = "notes")
 class Note (
@@ -29,7 +32,6 @@ class Note (
     @ColumnInfo(name ="timestamp")
     private var timestamp: String?
 ) : Parcelable {
-
 
     constructor(parcel: Parcel) : this(
         parcel.readValue(Int::class.java.classLoader) as? Int,
