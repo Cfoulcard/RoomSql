@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.roomsql.adapters.NotesRecyclerAdapter
 import com.example.roomsql.models.Note
+import com.example.roomsql.persistence.NoteRepository
 import com.example.roomsql.util.VerticalSpacingItemDecorator
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -28,6 +29,7 @@ class NoteListActivity :
     private val mNotes = ArrayList<Note>()
     private var mNoteRecyclerAdapter: NotesRecyclerAdapter? = null
     private var mRecyclerView: RecyclerView? = null
+    private var mNoteRepository: NoteRepository? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,17 +38,37 @@ class NoteListActivity :
          mRecyclerView = findViewById(R.id.recyclerView)
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener(this)
 
+        mNoteRepository = NoteRepository(this)
+
         initRecyclerView()
-        insertFakeNotes()
+      //  insertFakeNotes()
 
         setSupportActionBar(findViewById<Toolbar>(R.id.toolbar))
         title = "Room SQL"
     }
 
+    // Observe changes to the live data object
+    fun retreiveNotes() {
+        mNoteRepository?.retrieveNotesTask()?.observe(this) {
+            // If notes are more than 0, clear data
+            if (mNotes.size > 0) {
+                mNotes.clear()
+            }
+            // Add all notes to the list
+            if (notes != null) {
+                mNotes.addAll(notes)
+            }
+            mNoteRecyclerAdapter!!.notifyDataSetChanged()
+        }
+    }
+
+
+
+
     // Note data testing for recycler view
     private fun insertFakeNotes() {
         for (i in 0..999) {
-            val note = Note("", "", "")
+            val note = Note(0, "", "", "")
             note.setTitle("title #$i")
             note.setContent("content #: $i")
             note.setTimestamp("Jan 2019")

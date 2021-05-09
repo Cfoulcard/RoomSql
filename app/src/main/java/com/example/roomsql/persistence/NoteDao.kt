@@ -10,13 +10,19 @@ import com.example.roomsql.models.Note
 @Dao
 interface NoteDao {
 
+    val mNoteDatabase: NoteDatabase?
+
     // Holds all the arrays that were inserted into the database
     @Insert
     fun insertNotes(notes: Note?): LongArray?
 
     // SQL search that can be interpreted as "Select all from the notes table"
     @Query("SELECT * FROM notes")
-    fun getNotes(): LiveData<MutableList<Note?>?>?
+    fun getNotes(): LiveData<MutableList<Note?>?>? {
+
+        // Get a reference from the DAO and call getNote() - Parsing LiveData
+        return mNoteDatabase?.getNoteDao()?.getNotes()
+    }
 
     // Deletes the Note as per the Int it is assigned to
     @Delete
