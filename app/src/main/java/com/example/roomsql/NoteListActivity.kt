@@ -55,9 +55,7 @@ class NoteListActivity :
                 mNotes.clear()
             }
             // Add all notes to the list
-            if (notes != null) {
-                mNotes.addAll(notes)
-            }
+            mNotes.addAll(mNotes)
             mNoteRecyclerAdapter!!.notifyDataSetChanged()
         }
     }
