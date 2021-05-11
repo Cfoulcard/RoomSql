@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -41,6 +42,7 @@ class NoteListActivity :
         mNoteRepository = NoteRepository(this)
 
         initRecyclerView()
+        retrieveNotes()
       //  insertFakeNotes()
 
         setSupportActionBar(findViewById<Toolbar>(R.id.toolbar))
@@ -48,15 +50,20 @@ class NoteListActivity :
     }
 
     // Observe changes to the live data object
-    fun retreiveNotes() {
+    private fun retrieveNotes() {
         mNoteRepository?.retrieveNotesTask()?.observe(this) {
-            // If notes are more than 0, clear data
-            if (mNotes.size > 0) {
-                mNotes.clear()
+            @Override
+            fun onChanged(@Nullable note: List<Note?>) {
+                // If notes are more than 0, clear data
+                if (mNotes.size > 0) {
+                    mNotes.clear()
+                }
+                // Add all notes to the list
+                if (note != null) {
+                    mNotes.addAll(mNotes)
+                    mNoteRecyclerAdapter!!.notifyDataSetChanged()
+                }
             }
-            // Add all notes to the list
-            mNotes.addAll(mNotes)
-            mNoteRecyclerAdapter!!.notifyDataSetChanged()
         }
     }
 
