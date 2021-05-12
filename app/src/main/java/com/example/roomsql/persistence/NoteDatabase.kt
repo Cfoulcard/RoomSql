@@ -19,6 +19,7 @@ abstract class NoteDatabase : RoomDatabase() {
    val DATABASE_NAME: String = "notes_db"
     private var instance: NoteDatabase? = null
 
+    // Builds the database if there's no current database
     open fun getInstance(context: Context?): NoteDatabase? {
         if (instance == null) {
             if (context != null) {

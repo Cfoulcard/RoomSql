@@ -2,6 +2,7 @@ package com.example.roomsql.persistence
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import com.example.roomsql.async.InsertAsyncTask
 import com.example.roomsql.models.Note
 
 /**
@@ -13,10 +14,11 @@ class NoteRepository(context: Context) {
 
     init {
         mNoteDatabase?.getInstance(context)
+        val insertAsyncTask: InsertAsyncTask
     }
 
     fun insertNoteTask(note: Note) {
-
+        InsertAsyncTask(mNoteDatabase!!.getNoteDao()!!).execute(note)
     }
 
     fun updateNoteTask(note: Note) {

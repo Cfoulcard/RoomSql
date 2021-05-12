@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.roomsql.adapters.NotesRecyclerAdapter
+import com.example.roomsql.async.InsertAsyncTask
 import com.example.roomsql.models.Note
 import com.example.roomsql.persistence.NoteRepository
 import com.example.roomsql.util.VerticalSpacingItemDecorator
@@ -31,6 +32,7 @@ class NoteListActivity :
     private var mNoteRecyclerAdapter: NotesRecyclerAdapter? = null
     private var mRecyclerView: RecyclerView? = null
     private var mNoteRepository: NoteRepository? = null
+    private val insertAsyncTask: InsertAsyncTask? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +49,8 @@ class NoteListActivity :
 
         setSupportActionBar(findViewById<Toolbar>(R.id.toolbar))
         title = "Room SQL"
+
+        Log.d("notethread", Thread.currentThread().name)
     }
 
     // Observe changes to the live data object

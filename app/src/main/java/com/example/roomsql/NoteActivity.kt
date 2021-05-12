@@ -14,6 +14,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.roomsql.models.Note
+import com.example.roomsql.persistence.NoteRepository
 
 /**
  * References the actual individual notes
@@ -41,6 +42,7 @@ class NoteActivity : AppCompatActivity(),
     private val EDIT_MODE_ENABLED = 1
     private val EDIT_MODE_DISABLED = 0
     private var mMode = 0
+    private val mNoteRepository: NoteRepository? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +56,7 @@ class NoteActivity : AppCompatActivity(),
         mCheckContainer = findViewById(R.id.check_container)
         mBackArrowContainer = findViewById(R.id.back_arrow_container)
 
+        mNoteRepository
         setListeners()
 
         if (incomingIntent) {
@@ -65,6 +68,18 @@ class NoteActivity : AppCompatActivity(),
             setNoteProperties()
             disableContentInteraction()
         }
+    }
+
+    private fun saveChanges() {
+        if (mIsNewNote) {
+            saveNewNote()
+        } else {
+
+        }
+    }
+
+    private fun saveNewNote() {
+        mNoteInitial?.let { mNoteRepository?.insertNoteTask(it) }
     }
 
     // When Line Edit Text is pressed, this will be passed to the touch listener
@@ -125,6 +140,7 @@ class NoteActivity : AppCompatActivity(),
         mMode = EDIT_MODE_DISABLED
 
         disableContentInteraction()
+        saveChanges()
     }
 
     private fun hideSoftKeyboard() {
