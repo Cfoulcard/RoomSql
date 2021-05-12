@@ -14,7 +14,6 @@ class NoteRepository(context: Context) {
 
     init {
         mNoteDatabase?.getInstance(context)
-        val insertAsyncTask: InsertAsyncTask
     }
 
     fun insertNoteTask(note: Note) {

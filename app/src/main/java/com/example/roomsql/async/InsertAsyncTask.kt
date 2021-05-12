@@ -5,9 +5,10 @@ import android.util.Log
 import com.example.roomsql.models.Note
 import com.example.roomsql.persistence.NoteDao
 
-class InsertAsyncTask(mNoteDao: NoteDao) : AsyncTask<Note, Void, Void>() {
+class InsertAsyncTask(dao: NoteDao) : AsyncTask<Note, Void, Void>() {
 
-    private val mNoteDao: NoteDao? = null
+    private var mNoteDao: NoteDao? = dao
+
 
     init {
         mNoteDao

@@ -2,7 +2,6 @@ package com.example.roomsql
 
 import android.app.Activity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -38,6 +37,7 @@ class NoteActivity : AppCompatActivity(),
     // Variables
     private var mIsNewNote = false
     private var mNoteInitial: Note? = null
+    private var mFinalNote: Note? = null
     private var mGestureDetector: GestureDetector? = null
     private val EDIT_MODE_ENABLED = 1
     private val EDIT_MODE_DISABLED = 0
@@ -61,8 +61,8 @@ class NoteActivity : AppCompatActivity(),
 
         if (incomingIntent) {
             // this is a new note (EDIT MODE)
-            setNewNoteProperties()
             enableEditMode()
+            setNewNoteProperties()
         } else {
             // this is not a new note (VIEW MODE)
             setNoteProperties()
@@ -79,7 +79,7 @@ class NoteActivity : AppCompatActivity(),
     }
 
     private fun saveNewNote() {
-        mNoteInitial?.let { mNoteRepository?.insertNoteTask(it) }
+        mNoteInitial?.let { mNoteRepository?.insertNoteTask(mFinalNote!!) }
     }
 
     // When Line Edit Text is pressed, this will be passed to the touch listener
@@ -96,6 +96,7 @@ class NoteActivity : AppCompatActivity(),
         get() {
             if (intent.hasExtra("selected note")) {
                 mNoteInitial = intent.getParcelableExtra("selected note")
+                mFinalNote = intent.getParcelableExtra("selected note")
 
                 mMode = EDIT_MODE_ENABLED
                 mIsNewNote = false
@@ -140,6 +141,21 @@ class NoteActivity : AppCompatActivity(),
         mMode = EDIT_MODE_DISABLED
 
         disableContentInteraction()
+
+        val temp: String = mLinedEditText?.text.toString()
+        temp.replace("\n", "")
+        temp.replace(" ", "")
+        if (temp.isNotEmpty()) {
+            mFinalNote?.setTitle(mEditTitle!!.text.toString())
+            mFinalNote?.setContent(mLinedEditText!!.text.toString())
+            val timestamp = "Feb 2"
+            mFinalNote?.setTimestamp(timestamp)
+
+            if (mFinalNote?.getContent().equals(mNoteInitial?.getContent()) ||
+                        mFinalNote?.getTitle().equals(mNoteInitial?.getTitle())) {
+                saveChanges()
+            }
+        }
         saveChanges()
     }
 
@@ -156,6 +172,11 @@ class NoteActivity : AppCompatActivity(),
     private fun setNewNoteProperties() {
         mViewTitle!!.text = "Note Title"
         mEditTitle!!.setText("Note Title")
+
+        mFinalNote
+        mNoteInitial
+        mNoteInitial?.setTitle("Note Title")
+        mFinalNote?.setTitle("Note Title")
     }
 
     private fun setNoteProperties() {
