@@ -2,11 +2,11 @@ package com.example.roomsql.models
 
 import android.os.Parcel
 import android.os.Parcelable
+import android.os.Parcelable.Creator
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import java.sql.Timestamp
 
 /**
  * Defining the Note being developed. The constructor method inside the class itself
@@ -18,45 +18,43 @@ import java.sql.Timestamp
  * columns(field info), and a primary key to identify what column to add/use in Room
  */
 @Entity(tableName = "notes")
-class Note (
+open class Note : Parcelable {
 
     @PrimaryKey(autoGenerate = true)
-    val id: Int?,
+    private var id = 0
 
-    @ColumnInfo(name ="title")
-    private var title: String?,
+    @ColumnInfo(name = "title")
+    private var title: String? = null
 
-    @ColumnInfo(name ="content")
-    private var content: String?,
+    @ColumnInfo(name = "content")
+    private var content: String? = null
 
-    @ColumnInfo(name ="timestamp")
-    private var timestamp: String?
-) : Parcelable {
+    @ColumnInfo(name = "timestamp")
+    private var timestamp: String? = null
 
-    constructor(parcel: Parcel) : this(
-        parcel.readValue(Int::class.java.classLoader) as? Int,
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString()
-    ) {
+    constructor(title: String?, content: String?, timestamp: String?) {
+        this.title = title
+        this.content = content
+        this.timestamp = timestamp
     }
 
     @Ignore
-    fun Note() {}
+    constructor() {
+    }
 
-    protected fun Note(`in`: Parcel) {
+    protected constructor(`in`: Parcel) {
+        id = `in`.readInt()
         title = `in`.readString()
         content = `in`.readString()
         timestamp = `in`.readString()
     }
 
-    @JvmName("getId1")
-    fun getId(): Int? {
+    fun getId(): Int {
         return id
     }
 
-    fun setId(): Int? {
-        return id
+    fun setId(id: Int) {
+        this.id = id
     }
 
     fun getTitle(): String? {
@@ -83,36 +81,36 @@ class Note (
         this.timestamp = timestamp
     }
 
-    // Prints out Note info into the log
     override fun toString(): String {
-        return "Note(id=$id, " +
-                "title=$title, " +
-                "content=$content, " +
-                "timestamp=$timestamp)"
+        return "Note{" +
+                "title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", timestamp='" + timestamp + '\'' +
+                '}'
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    override fun writeToParcel(parcel: Parcel, i: Int) {
+        parcel.writeInt(id)
+        parcel.writeString(title)
+        parcel.writeString(content)
+        parcel.writeString(timestamp)
+    }
+
+    companion object CREATOR : Creator<Note> {
+        override fun createFromParcel(parcel: Parcel): Note {
+            return Note(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Note?> {
+            return arrayOfNulls(size)
+        }
     }
 
 
-
-override fun writeToParcel(parcel: Parcel, flags: Int) {
-    parcel.writeValue(id)
-    parcel.writeString(title)
-    parcel.writeString(content)
-    parcel.writeString(timestamp)
-}
-
-override fun describeContents(): Int {
-    return 0
-}
-
-companion object CREATOR : Parcelable.Creator<Note> {
-    override fun createFromParcel(parcel: Parcel): Note {
-        return Note(parcel)
-    }
-
-    override fun newArray(size: Int): Array<Note?> {
-        return arrayOfNulls(size)
-    }
 }
 
 
-}

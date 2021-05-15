@@ -1,22 +1,17 @@
 package com.example.roomsql.async
 
 import android.os.AsyncTask
-import android.util.Log
 import com.example.roomsql.models.Note
 import com.example.roomsql.persistence.NoteDao
 
-class InsertAsyncTask(dao: NoteDao) : AsyncTask<Note, Void, Void>() {
-
-    private var mNoteDao: NoteDao? = dao
-
-
-    init {
-        mNoteDao
-    }
+/**
+ * Used to perform background task, in this case adding notes using the Note class template via
+ * the NoteDAO
+ */
+class InsertAsyncTask(private val mNoteDao: NoteDao) : AsyncTask<Note?, Void?, Void?>() {
 
     override fun doInBackground(vararg notes: Note?): Void? {
-        Log.d("AsyncTask", Thread.currentThread().name)
-        mNoteDao?.insertNotes(notes)
+        mNoteDao.insertNotes(*notes)
         return null
     }
 

@@ -9,7 +9,9 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
 
-
+/**
+ * Used to stylize the note page style by adding lines
+ */
 class LinedEditText(context: Context?, attrs: AttributeSet?) :
     AppCompatEditText(context!!, attrs) {
     private val mRect: Rect = Rect()

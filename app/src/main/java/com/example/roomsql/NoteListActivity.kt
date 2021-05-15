@@ -4,14 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.roomsql.adapters.NotesRecyclerAdapter
-import com.example.roomsql.async.InsertAsyncTask
 import com.example.roomsql.models.Note
 import com.example.roomsql.persistence.NoteRepository
 import com.example.roomsql.util.VerticalSpacingItemDecorator
@@ -32,7 +31,6 @@ class NoteListActivity :
     private var mNoteRecyclerAdapter: NotesRecyclerAdapter? = null
     private var mRecyclerView: RecyclerView? = null
     private var mNoteRepository: NoteRepository? = null
-    private val insertAsyncTask: InsertAsyncTask? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +43,7 @@ class NoteListActivity :
 
         initRecyclerView()
         retrieveNotes()
-      //  insertFakeNotes()
+     //   insertFakeNotes()
 
         setSupportActionBar(findViewById<Toolbar>(R.id.toolbar))
         title = "Room SQL"
@@ -53,31 +51,45 @@ class NoteListActivity :
         Log.d("notethread", Thread.currentThread().name)
     }
 
-    // Observe changes to the live data object
-    private fun retrieveNotes() {
-        mNoteRepository?.retrieveNotesTask()?.observe(this) {
-            @Override
-            fun onChanged(@Nullable note: List<Note?>) {
-                // If notes are more than 0, clear data
-                if (mNotes.size > 0) {
-                    mNotes.clear()
-                }
-                // Add all notes to the list
-                if (note != null) {
-                    mNotes.addAll(mNotes)
-                    mNoteRecyclerAdapter!!.notifyDataSetChanged()
-                }
-            }
-        }
+    override fun onStart() {
+
+
+        super.onStart()
     }
 
+    // Observe changes to the live data object
 
+    private fun retrieveNotes() {
+        mNoteRepository?.retrieveNotesTask()?.observe(this, { notes ->
 
+            if (mNotes.size > 0) {
+                mNotes.clear()
+            }
+            if (notes != null) {
+                mNotes.addAll(notes)
+            }
+            mNoteRecyclerAdapter!!.notifyDataSetChanged()
+        })
+    }
+
+//    private fun retrieveNotes2() {
+//        mNoteRepository!!.retrieveNotesTask().observe(this, Observer<List<Note?>?>() {
+//            fun onChanged(notes: List<Note?>?) {
+//                if (mNotes.size > 0) {
+//                    mNotes.clear()
+//                }
+//                if (notes != null) {
+//                    mNotes.addAll(notes)
+//                }
+//                mNoteRecyclerAdapter!!.notifyDataSetChanged()
+//            }
+//        })
+//    }
 
     // Note data testing for recycler view
     private fun insertFakeNotes() {
         for (i in 0..999) {
-            val note = Note(0, "", "", "")
+            val note = Note("", "", "")
             note.setTitle("title #$i")
             note.setContent("content #: $i")
             note.setTimestamp("Jan 2019")
@@ -117,7 +129,7 @@ class NoteListActivity :
         mNoteRecyclerAdapter!!.notifyDataSetChanged()
     }
 
-    var itemTouchHelperCallback: ItemTouchHelper.SimpleCallback =
+    private var itemTouchHelperCallback: ItemTouchHelper.SimpleCallback =
         object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
 
             override fun onMove(

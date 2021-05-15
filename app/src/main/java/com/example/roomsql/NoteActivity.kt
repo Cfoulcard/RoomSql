@@ -42,7 +42,7 @@ class NoteActivity : AppCompatActivity(),
     private val EDIT_MODE_ENABLED = 1
     private val EDIT_MODE_DISABLED = 0
     private var mMode = 0
-    private val mNoteRepository: NoteRepository? = null
+    private var mNoteRepository: NoteRepository? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +56,8 @@ class NoteActivity : AppCompatActivity(),
         mCheckContainer = findViewById(R.id.check_container)
         mBackArrowContainer = findViewById(R.id.back_arrow_container)
 
-        mNoteRepository
+        mNoteRepository = NoteRepository(this)
+
         setListeners()
 
         if (incomingIntent) {
@@ -78,8 +79,8 @@ class NoteActivity : AppCompatActivity(),
         }
     }
 
-    private fun saveNewNote() {
-        mNoteInitial?.let { mNoteRepository?.insertNoteTask(mFinalNote!!) }
+     private fun saveNewNote() {
+        mNoteRepository?.insertNoteTask(mFinalNote)
     }
 
     // When Line Edit Text is pressed, this will be passed to the touch listener
@@ -146,8 +147,8 @@ class NoteActivity : AppCompatActivity(),
         temp.replace("\n", "")
         temp.replace(" ", "")
         if (temp.isNotEmpty()) {
-            mFinalNote?.setTitle(mEditTitle!!.text.toString())
-            mFinalNote?.setContent(mLinedEditText!!.text.toString())
+            mFinalNote?.setTitle(mEditTitle?.text.toString())
+            mFinalNote?.setContent(mLinedEditText?.text.toString())
             val timestamp = "Feb 2"
             mFinalNote?.setTimestamp(timestamp)
 
@@ -156,7 +157,6 @@ class NoteActivity : AppCompatActivity(),
                 saveChanges()
             }
         }
-        saveChanges()
     }
 
     private fun hideSoftKeyboard() {
@@ -173,16 +173,16 @@ class NoteActivity : AppCompatActivity(),
         mViewTitle!!.text = "Note Title"
         mEditTitle!!.setText("Note Title")
 
-        mFinalNote
-        mNoteInitial
+        mFinalNote = Note()
+        mNoteInitial = Note()
         mNoteInitial?.setTitle("Note Title")
         mFinalNote?.setTitle("Note Title")
     }
 
     private fun setNoteProperties() {
-        mViewTitle!!.text = mNoteInitial!!.getTitle()
+        mViewTitle?.text = mNoteInitial?.getTitle()
         mEditTitle?.setText(mNoteInitial?.getTitle())
-        mLinedEditText!!.setText(mNoteInitial!!.getContent())
+        mLinedEditText?.setText(mNoteInitial?.getContent())
     }
 
     // View.OnTouchListener Implemented Member

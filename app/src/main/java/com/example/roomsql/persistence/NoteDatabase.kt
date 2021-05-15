@@ -14,25 +14,27 @@ import com.example.roomsql.models.Note
  * the schemas folder after implementing Gradle export schemas in link above.
  */
 @Database(entities = [Note::class], version = 1)
+
 abstract class NoteDatabase : RoomDatabase() {
 
-   val DATABASE_NAME: String = "notes_db"
-    private var instance: NoteDatabase? = null
+    abstract val noteDao: NoteDao
 
-    // Builds the database if there's no current database
-    open fun getInstance(context: Context?): NoteDatabase? {
-        if (instance == null) {
-            if (context != null) {
+    companion object {
+
+        lateinit var getInstance: NoteDatabase
+        const val DATABASE_NAME = "notes_db"
+        private var instance: NoteDatabase? = null
+
+        fun getInstance(context: Context): NoteDatabase? {
+            if (instance == null) {
                 instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        NoteDatabase::class.java,
-                        DATABASE_NAME
-                ).build()
+                    context.applicationContext,
+                    NoteDatabase::class.java,
+                    DATABASE_NAME
+                ).fallbackToDestructiveMigration()
+                    .build()
             }
+            return instance
         }
-        return instance
     }
-
-    abstract fun getNoteDao(): NoteDao?
-
 }

@@ -8,27 +8,21 @@ import com.example.roomsql.models.Note
 /**
  * Makes calls to the DAO -- Acts as an ambassador between the activity/fragments and Database
  */
-class NoteRepository(context: Context) {
+class NoteRepository(context: Context?) {
 
-    private val mNoteDatabase: NoteDatabase? = null
+    private val mNoteDatabase: NoteDatabase? = context?.let { NoteDatabase.getInstance(it) }
 
-    init {
-        mNoteDatabase?.getInstance(context)
+    fun insertNoteTask(note: Note?) {
+        if (mNoteDatabase != null) {
+            InsertAsyncTask(mNoteDatabase.noteDao).execute(note)
+        }
     }
 
-    fun insertNoteTask(note: Note) {
-        InsertAsyncTask(mNoteDatabase!!.getNoteDao()!!).execute(note)
-    }
+    fun deleteNoteTask(note: Note?) {}
 
-    fun updateNoteTask(note: Note) {
+    fun updateNoteTask(note: Note?) {}
 
-    }
-
-    fun retrieveNotesTask(): LiveData<MutableList<Note?>?>? {
-        return null
-    }
-
-    fun deleteNoteTask(note: Note) {
+    fun retrieveNotesTask(): LiveData<List<Note>>? = mNoteDatabase?.noteDao?.getNotes()
 
     }
-}
+
