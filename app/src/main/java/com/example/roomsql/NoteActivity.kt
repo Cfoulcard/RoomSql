@@ -2,6 +2,8 @@ package com.example.roomsql
 
 import android.app.Activity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -22,7 +24,8 @@ class NoteActivity : AppCompatActivity(),
     View.OnTouchListener,
     GestureDetector.OnGestureListener,
     GestureDetector.OnDoubleTapListener,
-    View.OnClickListener
+    View.OnClickListener,
+        TextWatcher
 {
 
     // UI components
@@ -62,8 +65,8 @@ class NoteActivity : AppCompatActivity(),
 
         if (incomingIntent) {
             // this is a new note (EDIT MODE)
-            enableEditMode()
             setNewNoteProperties()
+            enableEditMode()
         } else {
             // this is not a new note (VIEW MODE)
             setNoteProperties()
@@ -79,7 +82,7 @@ class NoteActivity : AppCompatActivity(),
         }
     }
 
-     private fun saveNewNote() {
+    private fun saveNewNote() {
         mNoteRepository?.insertNoteTask(mFinalNote)
     }
 
@@ -90,6 +93,7 @@ class NoteActivity : AppCompatActivity(),
         mCheck?.setOnClickListener(this)
         mViewTitle?.setOnClickListener(this)
         mBackArrow?.setOnClickListener(this)
+        mEditTitle?.addTextChangedListener(this)
 
     }
 
@@ -152,22 +156,22 @@ class NoteActivity : AppCompatActivity(),
             val timestamp = "Feb 2"
             mFinalNote?.setTimestamp(timestamp)
 
-            if (mFinalNote?.getContent().equals(mNoteInitial?.getContent()) ||
-                        mFinalNote?.getTitle().equals(mNoteInitial?.getTitle())) {
+            if (!mFinalNote?.getContent().equals(mNoteInitial?.getContent()) ||
+                !mFinalNote?.getTitle().equals(mNoteInitial?.getTitle())) {
                 saveChanges()
             }
         }
     }
 
-    private fun hideSoftKeyboard() {
-        val imm: InputMethodManager =
-            this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        val view: View? = this.getCurrentFocus()
-        if (view == null) {
-            View(this)
-        }
-        imm.hideSoftInputFromWindow(view?.windowToken, 0)
-    }
+//    private fun hideSoftKeyboard() {
+//        val imm: InputMethodManager =
+//            this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+//        val view: View? = this.getCurrentFocus()
+//        if (view == null) {
+//            View(this)
+//        }
+//        imm.hideSoftInputFromWindow(view?.windowToken, 0)
+//    }
 
     private fun setNewNoteProperties() {
         mViewTitle!!.text = "Note Title"
@@ -180,7 +184,7 @@ class NoteActivity : AppCompatActivity(),
     }
 
     private fun setNoteProperties() {
-        mViewTitle?.text = mNoteInitial?.getTitle()
+        mViewTitle?.setText(mNoteInitial?.getTitle())
         mEditTitle?.setText(mNoteInitial?.getTitle())
         mLinedEditText?.setText(mNoteInitial?.getContent())
     }
@@ -253,8 +257,10 @@ class NoteActivity : AppCompatActivity(),
 
     override fun onClick(v: View?) {
         when (v?.id) {
+            R.id.toolbar_back_arrow -> {
+                finish()
+            }
             R.id.toolbar_check -> {
-                hideSoftKeyboard()
                 disableEditMode()
             }
             R.id.note_text_title -> {
@@ -262,9 +268,7 @@ class NoteActivity : AppCompatActivity(),
                 mEditTitle!!.requestFocus()
                 mEditTitle!!.setSelection(mEditTitle!!.length())
             }
-            R.id.toolbar_back_arrow -> {
-                finish()
-            }
+
         }
     }
 
@@ -289,5 +293,20 @@ class NoteActivity : AppCompatActivity(),
         if (mMode == EDIT_MODE_ENABLED) {
             enableEditMode()
         }
+    }
+
+    // TextWatcher Interface
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        return
+    }
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        mViewTitle?.text = s.toString()
+    }
+
+    override fun afterTextChanged(s: Editable?) {
+        return
     }
 }

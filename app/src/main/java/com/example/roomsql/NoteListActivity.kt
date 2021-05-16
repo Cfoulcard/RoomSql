@@ -36,14 +36,14 @@ class NoteListActivity :
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes_list)
 
-         mRecyclerView = findViewById(R.id.recyclerView)
+        mRecyclerView = findViewById(R.id.recyclerView)
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener(this)
 
         mNoteRepository = NoteRepository(this)
 
         initRecyclerView()
         retrieveNotes()
-     //   insertFakeNotes()
+        //   insertFakeNotes()
 
         setSupportActionBar(findViewById<Toolbar>(R.id.toolbar))
         title = "Room SQL"
