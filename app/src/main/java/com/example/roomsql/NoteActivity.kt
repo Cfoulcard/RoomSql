@@ -1,6 +1,5 @@
 package com.example.roomsql
 
-import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,7 +7,6 @@ import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.RelativeLayout
@@ -16,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.roomsql.models.Note
 import com.example.roomsql.persistence.NoteRepository
+import com.example.roomsql.util.Timestamp
 
 /**
  * References the actual individual notes
@@ -147,14 +146,18 @@ class NoteActivity : AppCompatActivity(),
 
         disableContentInteraction()
 
-        val temp: String = mLinedEditText?.text.toString()
-        temp.replace("\n", "")
-        temp.replace(" ", "")
+
+        // Check if they typed anything into the note. Don't want to save an empty note.
+        var temp = mLinedEditText!!.text.toString()
+        val timestampSetter: String = Timestamp.getCurrentTimeStamp().toString()
+
+
+        temp = temp.replace("\n", "")
+        temp = temp.replace(" ", "")
         if (temp.isNotEmpty()) {
-            mFinalNote?.setTitle(mEditTitle?.text.toString())
-            mFinalNote?.setContent(mLinedEditText?.text.toString())
-            val timestamp = "Feb 2"
-            mFinalNote?.setTimestamp(timestamp)
+            mFinalNote?.setTitle(mEditTitle!!.text.toString())
+            mFinalNote?.setContent(mLinedEditText!!.text.toString())
+            mFinalNote?.setTimestamp(timestampSetter)
 
             if (!mFinalNote?.getContent().equals(mNoteInitial?.getContent()) ||
                 !mFinalNote?.getTitle().equals(mNoteInitial?.getTitle())) {

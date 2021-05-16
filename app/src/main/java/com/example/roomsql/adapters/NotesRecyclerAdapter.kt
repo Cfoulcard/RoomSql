@@ -1,5 +1,6 @@
 package com.example.roomsql.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.roomsql.R
 import com.example.roomsql.models.Note
+import com.example.roomsql.util.Timestamp
 
 /**
  * RecyclerView.Adapter references the ViewHolder we just created within this class. Syncs with
@@ -19,6 +21,7 @@ class NotesRecyclerAdapter(mNotes: ArrayList<Note>, onNoteListener: OnNoteListen
     // Using arraylist to automatically adapt to the size of the notes. Regular arrays cannot
     // accomplish this
     private var mNotes = mNotes
+    val timestamp: Timestamp? = null
 
     private var mOnNoteListener: OnNoteListener? = onNoteListener
 
@@ -55,14 +58,21 @@ class NotesRecyclerAdapter(mNotes: ArrayList<Note>, onNoteListener: OnNoteListen
         }
     }
 
-
-
     /**
      * Called for every entry in your list. Sets attributes to ViewHolder objects
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.timestamp?.text = mNotes[position].getTimestamp()
-        holder.title?.text = mNotes[position].getTitle()
+
+        try {
+            val month = mNotes[position].getTimestamp()!!.substring(0, 3)
+          //  month = timestamp?.getMonthFromNumber(month).toString()
+            val year = mNotes[position].getTimestamp()!!.substring(3)
+            val timestamp = "$month $year"
+            holder.timestamp!!.text = timestamp
+            holder.title!!.text = mNotes[position].getTitle()
+        } catch (e: NullPointerException) {
+            Log.e("Recycler Adapter", "onBindViewHolder: Null Pointer: " + e.message)
+        }
     }
 
     /**
