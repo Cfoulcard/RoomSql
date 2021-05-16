@@ -127,6 +127,8 @@ class NoteListActivity :
     private fun deleteNote(note: Note) {
         mNotes.remove(note)
         mNoteRecyclerAdapter!!.notifyDataSetChanged()
+
+        mNoteRepository?.deleteNoteTask(note)
     }
 
     private var itemTouchHelperCallback: ItemTouchHelper.SimpleCallback =

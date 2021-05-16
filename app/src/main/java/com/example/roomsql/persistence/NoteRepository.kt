@@ -2,7 +2,9 @@ package com.example.roomsql.persistence
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import com.example.roomsql.async.DeleteAsyncTask
 import com.example.roomsql.async.InsertAsyncTask
+import com.example.roomsql.async.UpdateAsyncTask
 import com.example.roomsql.models.Note
 
 /**
@@ -18,9 +20,17 @@ class NoteRepository(context: Context?) {
         }
     }
 
-    fun deleteNoteTask(note: Note?) {}
+    fun deleteNoteTask(note: Note?) {
+        if (mNoteDatabase != null) {
+            DeleteAsyncTask(mNoteDatabase.noteDao).execute(note)
+        }
+    }
 
-    fun updateNoteTask(note: Note?) {}
+    fun updateNoteTask(note: Note?) {
+        if (mNoteDatabase != null) {
+            UpdateAsyncTask(mNoteDatabase.noteDao).execute(note)
+        }
+    }
 
     fun retrieveNotesTask(): LiveData<List<Note>>? = mNoteDatabase?.noteDao?.getNotes()
 

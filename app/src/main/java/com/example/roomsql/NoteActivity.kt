@@ -73,11 +73,15 @@ class NoteActivity : AppCompatActivity(),
         }
     }
 
+    private fun updateNote() {
+        mNoteRepository?.updateNoteTask(mFinalNote)
+    }
+
     private fun saveChanges() {
         if (mIsNewNote) {
             saveNewNote()
         } else {
-
+            updateNote()
         }
     }
 
@@ -101,6 +105,12 @@ class NoteActivity : AppCompatActivity(),
             if (intent.hasExtra("selected note")) {
                 mNoteInitial = intent.getParcelableExtra("selected note")
                 mFinalNote = intent.getParcelableExtra("selected note")
+
+                mFinalNote = Note()
+                mFinalNote?.setTitle(mNoteInitial?.getTitle())
+                mFinalNote?.setContent(mNoteInitial?.getContent())
+                mFinalNote?.setTimestamp(mNoteInitial?.getTimestamp())
+                mNoteInitial?.getId()?.let { mFinalNote?.setId(it) }
 
                 mMode = EDIT_MODE_ENABLED
                 mIsNewNote = false
