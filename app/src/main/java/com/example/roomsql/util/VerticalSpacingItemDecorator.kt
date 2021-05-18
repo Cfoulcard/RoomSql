@@ -4,6 +4,9 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * Used to help vertically space the notes listed on the NoteListActivity
+ */
 class VerticalSpacingItemDecorator(private var verticalSpaceHeight: Int) :
     RecyclerView.ItemDecoration() {
 

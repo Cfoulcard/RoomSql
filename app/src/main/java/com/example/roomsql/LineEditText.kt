@@ -10,15 +10,17 @@ import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
 
 /**
- * Used to stylize the note page style by adding lines
+ * Used to stylize the note page style by adding lines and describe the note page background
  */
 class LinedEditText(context: Context?, attrs: AttributeSet?) :
     AppCompatEditText(context!!, attrs) {
+
     private val mRect: Rect = Rect()
     private val mPaint: Paint = Paint()
+
     protected override fun onDraw(canvas: Canvas) {
 
-        // get the height of the view
+        // Get the height of the view
         val height = (this.parent as View).height
         val lineHeight: Int = lineHeight
         val numberOfLines = height / lineHeight
@@ -42,7 +44,7 @@ class LinedEditText(context: Context?, attrs: AttributeSet?) :
         private const val TAG = "LinedEditText"
     }
 
-    // we need this constructor for LayoutInflater
+    // we need this for LayoutInflater
     init {
         mPaint.style = Paint.Style.STROKE
         mPaint.strokeWidth = 2f

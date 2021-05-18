@@ -6,7 +6,7 @@ import com.example.roomsql.persistence.NoteDao
 
 /**
  * Used to perform background task, in this case adding notes using the Note class template via
- * the NoteDAO
+ * the NoteDao
  */
 class InsertAsyncTask(private val mNoteDao: NoteDao) : AsyncTask<Note?, Void?, Void?>() {
 

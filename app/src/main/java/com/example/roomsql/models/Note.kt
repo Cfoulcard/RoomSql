@@ -9,8 +9,8 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 /**
- * Defining the Note being developed. The constructor method inside the class itself
- * allows us to input content (title, content, timestamp) into the class when we are ready to use it.
+ * Defining the Note being developed. The constructor method inside the class itself allows
+ * us to input content (title, content, timestamp) into the class when we are ready to use it.
  *
  * This class implements Parcelable to package the Note object and add it to a bundle.
  *
@@ -38,6 +38,7 @@ open class Note : Parcelable {
         this.timestamp = timestamp
     }
 
+    // If Note is empty, have room ignore it entirely
     @Ignore
     constructor() {
     }
@@ -49,6 +50,8 @@ open class Note : Parcelable {
         timestamp = `in`.readString()
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Get and setter methods
     fun getId(): Int {
         return id
     }
@@ -80,7 +83,9 @@ open class Note : Parcelable {
     fun setTimestamp(timestamp: String?) {
         this.timestamp = timestamp
     }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // For testing note properties
     override fun toString(): String {
         return "Note{" +
                 "title='" + title + '\'' +
@@ -89,6 +94,8 @@ open class Note : Parcelable {
                 '}'
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Parcelable Implementations automatically generated
     override fun describeContents(): Int {
         return 0
     }
@@ -109,8 +116,6 @@ open class Note : Parcelable {
             return arrayOfNulls(size)
         }
     }
-
-
 }
 
 

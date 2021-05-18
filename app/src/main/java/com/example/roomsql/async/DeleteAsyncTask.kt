@@ -4,6 +4,9 @@ import android.os.AsyncTask
 import com.example.roomsql.models.Note
 import com.example.roomsql.persistence.NoteDao
 
+/**
+ * Delete Notes via the delete method in NoteDao
+ */
 class DeleteAsyncTask(private val mNoteDao: NoteDao) : AsyncTask<Note?, Void?, Void?>() {
 
     override fun doInBackground(vararg notes: Note?): Void? {

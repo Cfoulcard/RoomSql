@@ -21,7 +21,6 @@ abstract class NoteDatabase : RoomDatabase() {
 
     companion object {
 
-        lateinit var getInstance: NoteDatabase
         const val DATABASE_NAME = "notes_db"
         private var instance: NoteDatabase? = null
 

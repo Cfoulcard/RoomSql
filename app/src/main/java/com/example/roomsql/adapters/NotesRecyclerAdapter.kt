@@ -14,19 +14,17 @@ import com.example.roomsql.util.Timestamp
  * RecyclerView.Adapter references the ViewHolder we just created within this class. Syncs with
  * the note objects and list of notes in the XML. The Data Structure used to hold these notes
  * is an array list
+ *
+ * @param mNotes - ArrayList used to automatically adapt to the size of the notes. Regular arrays
+ * cannot accomplish this
  */
-class NotesRecyclerAdapter(mNotes: ArrayList<Note>, onNoteListener: OnNoteListener?) :
+class NotesRecyclerAdapter(private var mNotes: ArrayList<Note>, onNoteListener: OnNoteListener?) :
     RecyclerView.Adapter<NotesRecyclerAdapter.ViewHolder>() {
-
-    // Using arraylist to automatically adapt to the size of the notes. Regular arrays cannot
-    // accomplish this
-    private var mNotes = mNotes
-    val timestamp: Timestamp? = null
 
     private var mOnNoteListener: OnNoteListener? = onNoteListener
 
     /**
-     * Responsible for initializing the viewholder object. This method can be used almost
+     * Responsible for initializing the ViewHolder object. This method can be used almost
      * universally on any RecyclerView Adapter class with minor refactoring!
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -39,12 +37,13 @@ class NotesRecyclerAdapter(mNotes: ArrayList<Note>, onNoteListener: OnNoteListen
      * Responsible for holding the view of each individual list item
      */
     class ViewHolder(itemView: View, onNoteListener: OnNoteListener?) : RecyclerView.ViewHolder(
-        itemView
-    ), View.OnClickListener {
+        itemView), View.OnClickListener {
 
+        // TextViews
         var timestamp: TextView? = null
         var title:TextView? = null
-        var mOnNoteListener: OnNoteListener? = null
+
+        private var mOnNoteListener: OnNoteListener? = null
 
         init {
             title = itemView.findViewById(R.id.note_title)
@@ -59,7 +58,7 @@ class NotesRecyclerAdapter(mNotes: ArrayList<Note>, onNoteListener: OnNoteListen
     }
 
     /**
-     * Called for every entry in your list. Sets attributes to ViewHolder objects
+     * Called for every entry in the list. Sets attributes to ViewHolder objects
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
