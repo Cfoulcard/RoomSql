@@ -2,11 +2,9 @@ package com.example.roomsql
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,28 +34,22 @@ class NoteListActivity :
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes_list)
 
+        // View Data
         mRecyclerView = findViewById(R.id.recyclerView)
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener(this)
 
+        // Context
         mNoteRepository = NoteRepository(this)
 
         initRecyclerView()
         retrieveNotes()
         //   insertFakeNotes()
 
-        setSupportActionBar(findViewById<Toolbar>(R.id.toolbar))
+        setSupportActionBar(findViewById(R.id.toolbar))
         title = "Room SQL"
 
-        Log.d("notethread", Thread.currentThread().name)
+     //   Log.d("notethread", Thread.currentThread().name)
     }
-
-    override fun onStart() {
-
-
-        super.onStart()
-    }
-
-    // Observe changes to the live data object
 
     private fun retrieveNotes() {
         mNoteRepository?.retrieveNotesTask()?.observe(this, { notes ->
@@ -72,20 +64,6 @@ class NoteListActivity :
         })
     }
 
-//    private fun retrieveNotes2() {
-//        mNoteRepository!!.retrieveNotesTask().observe(this, Observer<List<Note?>?>() {
-//            fun onChanged(notes: List<Note?>?) {
-//                if (mNotes.size > 0) {
-//                    mNotes.clear()
-//                }
-//                if (notes != null) {
-//                    mNotes.addAll(notes)
-//                }
-//                mNoteRecyclerAdapter!!.notifyDataSetChanged()
-//            }
-//        })
-//    }
-
     // Note data testing for recycler view
     private fun insertFakeNotes() {
         for (i in 0..999) {
@@ -98,6 +76,7 @@ class NoteListActivity :
         mNoteRecyclerAdapter!!.notifyDataSetChanged()
     }
 
+    // RecyclerView Properties upon initialization
     private fun initRecyclerView() {
 
         val linearLayoutManager = LinearLayoutManager(this)
@@ -113,14 +92,14 @@ class NoteListActivity :
      * Used to return a specified action, such as opening a new activity. In this case notes
      */
     override fun onNoteClick(position: Int) {
-        Log.d("ClickMe!", "onNoteClick: $position")
+     //   Log.d("ClickMe!", "onNoteClick: $position")
         val intent = Intent(this, NoteActivity::class.java)
-        intent.putExtra("selected note", mNotes.get(position))
+        intent.putExtra("selected note", mNotes[position])
         this.startActivity(intent)
     }
 
     override fun onClick(v: View?) {
-        val intent: Intent = Intent(this, NoteActivity::class.java)
+        val intent = Intent(this, NoteActivity::class.java)
         startActivity(intent)
     }
 
@@ -146,5 +125,4 @@ class NoteListActivity :
                 deleteNote(mNotes[viewHolder.adapterPosition])
             }
         }
-
 }

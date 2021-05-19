@@ -2,26 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:weightSum="100"
-    android:background="@color/purple_200"
-    android:gravity="center_vertical">
+    android:layout_margin="2dp"
+    android:background="@android:color/holo_blue_bright"
+    android:elevation="4dp"
+    android:gravity="center_vertical"
+    android:translationZ="4dp"
+    android:weightSum="100">
 
     <View
         android:id="@+id/view"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:background="@color/purple_500"/>
+        android:background="@color/purple_500" />
 
     <TextView
         android:id="@+id/note_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="75"
-        android:text="@string/an_epic_title"
-        android:textSize="23sp"
+        android:fontFamily="@font/new_rocker"
         android:lines="1"
         android:padding="10dp"
-        android:textColor="@color/black"/>
+        android:text="@string/an_epic_title"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:typeface="sans" />
 
     <View
         android:id="@+id/view2"
@@ -34,8 +39,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="20"
-        android:text="@string/sep_21"
-        android:textSize="17sp"
+        android:fontFamily="@font/new_rocker"
         android:padding="10dp"
-        android:textColor="@color/black"/>
+        android:text="@string/sep_21"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
 </LinearLayout>

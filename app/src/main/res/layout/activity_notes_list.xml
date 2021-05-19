@@ -30,6 +30,7 @@
         android:layout_height="match_parent"
 
 
+        android:background="@android:color/holo_blue_dark"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -38,7 +39,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="5dp"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </androidx.core.widget.NestedScrollView>
 
@@ -48,10 +49,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
+        android:background="@android:color/holo_blue_bright"
         android:clickable="true"
         android:elevation="2dp"
         android:translationZ="4dp"
-        app:srcCompat="@android:drawable/btn_star_big_on" />
+        app:backgroundTint="@android:color/holo_orange_light"
+        app:srcCompat="@android:drawable/ic_input_add" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

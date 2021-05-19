@@ -48,8 +48,9 @@ class NoteActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dummy)
+        setContentView(R.layout.activity_note)
 
+        // Views
         mLinedEditText = findViewById(R.id.note_text)
         mEditTitle = findViewById(R.id.note_edit_title)
         mViewTitle = findViewById(R.id.note_text_title)
@@ -62,6 +63,7 @@ class NoteActivity : AppCompatActivity(),
 
         setListeners()
 
+        // Setting the note properties after adding to the note list
         if (incomingIntent) {
             // this is a new note (EDIT MODE)
             setNewNoteProperties()
@@ -73,6 +75,8 @@ class NoteActivity : AppCompatActivity(),
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // If note data has changed
     private fun updateNote() {
         mNoteRepository?.updateNoteTask(mFinalNote)
     }
@@ -89,7 +93,7 @@ class NoteActivity : AppCompatActivity(),
         mNoteRepository?.insertNoteTask(mFinalNote)
     }
 
-    // When Line Edit Text is pressed, this will be passed to the touch listener
+    // Listener actions to call
     private fun setListeners() {
         mLinedEditText?.setOnTouchListener(this)
         mGestureDetector = GestureDetector(this, this)
@@ -97,7 +101,6 @@ class NoteActivity : AppCompatActivity(),
         mViewTitle?.setOnClickListener(this)
         mBackArrow?.setOnClickListener(this)
         mEditTitle?.addTextChangedListener(this)
-
     }
 
     private val incomingIntent: Boolean
@@ -156,12 +159,10 @@ class NoteActivity : AppCompatActivity(),
 
         disableContentInteraction()
 
-
-        // Check if they typed anything into the note. Don't want to save an empty note.
         var temp = mLinedEditText!!.text.toString()
         val timestampSetter: String = Timestamp.getCurrentTimeStamp().toString()
 
-
+        // Check if they typed anything into the note. Don't want to save an empty note.
         temp = temp.replace("\n", "")
         temp = temp.replace(" ", "")
         if (temp.isNotEmpty()) {
@@ -210,7 +211,7 @@ class NoteActivity : AppCompatActivity(),
         return mGestureDetector!!.onTouchEvent(event)
     }
 
-    // Gesture Detector Implemented Members
+    // MotionEvent Gesture Detector Implemented Members
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onDown(e: MotionEvent?): Boolean {
@@ -281,7 +282,6 @@ class NoteActivity : AppCompatActivity(),
                 mEditTitle!!.requestFocus()
                 mEditTitle!!.setSelection(mEditTitle!!.length())
             }
-
         }
     }
 
