@@ -46,7 +46,7 @@ class NoteListActivity :
         //   insertFakeNotes()
 
         setSupportActionBar(findViewById(R.id.toolbar))
-        title = "Room SQL"
+        title = "Room SQL Notes"
 
      //   Log.d("notethread", Thread.currentThread().name)
     }

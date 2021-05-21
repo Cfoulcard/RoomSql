@@ -18,8 +18,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/cardview_dark_background"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:titleTextColor="@color/white">
-        </androidx.appcompat.widget.Toolbar>
+            app:titleTextColor="@color/white" />
 
 
 
